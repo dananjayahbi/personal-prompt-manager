@@ -4,23 +4,13 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { 
-  LayoutDashboard, 
-  FileText, 
-  Eye, 
   Settings,
-  Plus,
-  Star,
   Brain,
-  Zap,
   Files
 } from "lucide-react"
-import { Button } from "@/components/ui/button"
 
 const navigation = [
-  { name: "Dashboard", href: "/", icon: LayoutDashboard, color: "text-blue-600" },
-  { name: "Prompts", href: "/prompts", icon: FileText, color: "text-green-600" },
-  { name: "Multi drafts", href: "/multi-drafts", icon: Files, color: "text-orange-600" },
-  { name: "Preview", href: "/preview", icon: Eye, color: "text-purple-600" },
+  { name: "Multi Drafts", href: "/multi-drafts", icon: Files, color: "text-orange-600" },
   { name: "Settings", href: "/settings", icon: Settings, color: "text-gray-600" },
 ]
 
@@ -78,22 +68,13 @@ export function SidebarNav({ collapsed = false }: SidebarNavProps) {
               Prompt Manager
             </h1>
             <p className="text-xs text-gray-500">
-              AI Template System
+              Multi-Draft System
             </p>
           </div>
         </div>
       </div>
       
       <div className="flex-1 p-4">
-        <div className="mb-6">
-          <Link href="/prompts/new">
-            <Button className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 justify-start">
-              <Plus className="mr-3 h-4 w-4" />
-              New Prompt
-            </Button>
-          </Link>
-        </div>
-        
         <div className="space-y-2">
           {navigation.map((item) => {
             const isActive = pathname === item.href
@@ -116,30 +97,6 @@ export function SidebarNav({ collapsed = false }: SidebarNavProps) {
               </Link>
             )
           })}
-        </div>
-        
-        <div className="mt-8 pt-6 border-t border-gray-200">
-          <div className="space-y-2">
-            <div className="px-4 py-2">
-              <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
-                Quick Actions
-              </p>
-            </div>
-            <Link
-              href="/prompts?favorites=true"
-              className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all duration-200"
-            >
-              <Star className="h-4 w-4 text-yellow-500" />
-              Favorites
-            </Link>
-            <Link
-              href="/preview"
-              className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-all duration-200"
-            >
-              <Zap className="h-4 w-4 text-purple-500" />
-              Test Prompts
-            </Link>
-          </div>
         </div>
       </div>
       
