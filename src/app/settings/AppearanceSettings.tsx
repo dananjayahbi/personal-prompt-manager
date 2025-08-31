@@ -17,25 +17,20 @@ export function AppearanceSettings({ settings, updateSetting }: AppearanceSettin
       <CardHeader>
         <CardTitle>Appearance</CardTitle>
         <CardDescription>
-          Customize the visual appearance of the application
+          Customize the visual appearance of the application (Light theme only)
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="space-y-2">
           <Label htmlFor="theme">Theme</Label>
-          <Select
-            value={settings.theme}
-            onValueChange={(value) => updateSetting('theme', value)}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select theme" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="light">Light</SelectItem>
-              <SelectItem value="dark">Dark</SelectItem>
-              <SelectItem value="system">System</SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="flex items-center space-x-2">
+            <div className="p-2 bg-gray-100 rounded text-sm text-gray-600">
+              ☀️ Light Theme (Fixed)
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            This application uses a light theme for optimal readability
+          </p>
         </div>
 
         <div className="space-y-2">
@@ -47,6 +42,19 @@ export function AppearanceSettings({ settings, updateSetting }: AppearanceSettin
             step={1}
             value={[settings.fontSize]}
             onValueChange={(value) => updateSetting('fontSize', value[0])}
+            className="w-full"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="lineHeight">Line Height: {settings.lineHeight}</Label>
+          <Slider
+            id="lineHeight"
+            min={1.0}
+            max={2.5}
+            step={0.1}
+            value={[settings.lineHeight]}
+            onValueChange={(value) => updateSetting('lineHeight', value[0])}
             className="w-full"
           />
         </div>
@@ -95,6 +103,34 @@ export function AppearanceSettings({ settings, updateSetting }: AppearanceSettin
             id="wordWrap"
             checked={settings.wordWrap}
             onCheckedChange={(checked) => updateSetting('wordWrap', checked)}
+          />
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="space-y-0.5">
+            <Label htmlFor="highlightActiveLine">Highlight Active Line</Label>
+            <p className="text-sm text-muted-foreground">
+              Highlight the current line in editors
+            </p>
+          </div>
+          <Switch
+            id="highlightActiveLine"
+            checked={settings.highlightActiveLine}
+            onCheckedChange={(checked) => updateSetting('highlightActiveLine', checked)}
+          />
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="space-y-0.5">
+            <Label htmlFor="showInvisibles">Show Invisible Characters</Label>
+            <p className="text-sm text-muted-foreground">
+              Display spaces, tabs, and line breaks
+            </p>
+          </div>
+          <Switch
+            id="showInvisibles"
+            checked={settings.showInvisibles}
+            onCheckedChange={(checked) => updateSetting('showInvisibles', checked)}
           />
         </div>
       </CardContent>

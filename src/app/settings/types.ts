@@ -1,5 +1,5 @@
 export interface SettingsData {
-  theme: string;
+  theme: 'light'; // Always light theme
   autoSave: boolean;
   autoSaveInterval: number;
   defaultCategory: string;
@@ -8,4 +8,9 @@ export interface SettingsData {
   fontSize: number;
   fontFamily: string;
   wordWrap: boolean;
+  lineHeight: number;
+  tabSize: number;
+  bracketMatching: boolean;
+  highlightActiveLine: boolean;
+  showInvisibles: boolean;
 }

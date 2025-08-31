@@ -21,6 +21,36 @@ export function EditorSettings({ settings, updateSetting }: EditorSettingsProps)
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
+        <div className="space-y-2">
+          <Label htmlFor="tabSize">Tab Size: {settings.tabSize} spaces</Label>
+          <Slider
+            id="tabSize"
+            min={2}
+            max={8}
+            step={1}
+            value={[settings.tabSize]}
+            onValueChange={(value) => updateSetting('tabSize', value[0])}
+            className="w-full"
+          />
+          <p className="text-xs text-muted-foreground">
+            Number of spaces per tab indentation
+          </p>
+        </div>
+
+        <div className="flex items-center justify-between">
+          <div className="space-y-0.5">
+            <Label htmlFor="bracketMatching">Bracket Matching</Label>
+            <p className="text-sm text-muted-foreground">
+              Highlight matching brackets when cursor is nearby
+            </p>
+          </div>
+          <Switch
+            id="bracketMatching"
+            checked={settings.bracketMatching}
+            onCheckedChange={(checked) => updateSetting('bracketMatching', checked)}
+          />
+        </div>
+
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
             <Label htmlFor="autoSave">Auto Save</Label>
