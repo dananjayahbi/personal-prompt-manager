@@ -1,6 +1,19 @@
+import React from 'react';
 import { Draft, DraftState } from './types';
 
-export const createNewDraft = async (drafts: DraftState[], setDrafts: Function, setOriginalDrafts: Function, setActiveTab: Function, toast: Function) => {
+type SetDraftsFunction = React.Dispatch<React.SetStateAction<DraftState[]>>;
+type SetOriginalDraftsFunction = React.Dispatch<React.SetStateAction<Draft[]>>;
+type SetActiveTabFunction = React.Dispatch<React.SetStateAction<string>>;
+type SetLoadingFunction = React.Dispatch<React.SetStateAction<boolean>>;
+type ToastFunction = (options: { title: string; description: string; variant?: 'default' | 'destructive' }) => void;
+
+export const createNewDraft = async (
+  drafts: DraftState[], 
+  setDrafts: SetDraftsFunction, 
+  setOriginalDrafts: SetOriginalDraftsFunction, 
+  setActiveTab: SetActiveTabFunction, 
+  toast: ToastFunction
+) => {
   try {
     const response = await fetch("/api/drafts", {
       method: "POST",
@@ -36,7 +49,13 @@ export const createNewDraft = async (drafts: DraftState[], setDrafts: Function, 
   }
 };
 
-export const loadDrafts = async (setDrafts: Function, setOriginalDrafts: Function, setActiveTab: Function, activeTab: string, toast: Function) => {
+export const loadDrafts = async (
+  setDrafts: SetDraftsFunction, 
+  setOriginalDrafts: SetOriginalDraftsFunction, 
+  setActiveTab: SetActiveTabFunction, 
+  activeTab: string, 
+  toast: ToastFunction
+) => {
   try {
     const response = await fetch("/api/drafts");
     if (response.ok) {
@@ -67,10 +86,10 @@ export const deleteDraft = async (
   drafts: DraftState[], 
   originalDrafts: Draft[], 
   activeTab: string,
-  setDrafts: Function, 
-  setOriginalDrafts: Function, 
-  setActiveTab: Function, 
-  toast: Function
+  setDrafts: SetDraftsFunction, 
+  setOriginalDrafts: SetOriginalDraftsFunction, 
+  setActiveTab: SetActiveTabFunction, 
+  toast: ToastFunction
 ) => {
   try {
     const response = await fetch(`/api/drafts/${id}`, {
@@ -112,10 +131,10 @@ export const deleteDraft = async (
 
 export const saveAllDrafts = async (
   drafts: DraftState[], 
-  setDrafts: Function, 
-  setOriginalDrafts: Function, 
-  setLoading: Function, 
-  toast: Function, 
+  setDrafts: SetDraftsFunction, 
+  setOriginalDrafts: SetOriginalDraftsFunction, 
+  setLoading: SetLoadingFunction, 
+  toast: ToastFunction, 
   isAutoSave: boolean = false
 ) => {
   setLoading(true);
