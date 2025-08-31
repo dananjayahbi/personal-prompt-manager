@@ -126,7 +126,7 @@ export const saveAllDrafts = async (
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(draftsToSave),
+      body: JSON.stringify({ drafts: draftsToSave }),
     });
 
     if (response.ok) {

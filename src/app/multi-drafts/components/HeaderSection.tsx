@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Save, Clock } from "lucide-react";
+import { Save, Clock } from "lucide-react";
+import { useState, useEffect } from "react";
 
 interface HeaderSectionProps {
   draftsCount: number;
   hasChanges: boolean;
   loading: boolean;
   lastAutoSave: Date;
-  onCreateNew: () => void;
   onSaveAll: () => void;
 }
 
@@ -16,9 +16,14 @@ export const HeaderSection = ({
   hasChanges,
   loading,
   lastAutoSave,
-  onCreateNew,
   onSaveAll,
 }: HeaderSectionProps) => {
+  const [timeString, setTimeString] = useState('');
+
+  useEffect(() => {
+    setTimeString(lastAutoSave.toLocaleTimeString());
+  }, [lastAutoSave]);
+
   return (
     <div className="flex justify-between items-center mb-6">
       <div className="space-y-1">
@@ -43,19 +48,11 @@ export const HeaderSection = ({
         
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Clock className="h-4 w-4" />
-          <span>Last auto-save: {lastAutoSave.toLocaleTimeString()}</span>
+          <span>Last auto-save: {timeString || '--:--:--'}</span>
         </div>
       </div>
       
       <div className="flex gap-2">
-        <Button
-          onClick={onCreateNew}
-          className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700"
-        >
-          <Plus className="mr-2 h-4 w-4" />
-          New Draft
-        </Button>
-        
         <Button
           onClick={onSaveAll}
           disabled={loading || !hasChanges}

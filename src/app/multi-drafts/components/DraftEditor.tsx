@@ -4,7 +4,18 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { FileText, Zap, Archive, Copy } from "lucide-react";
+import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { FileText, Zap, Archive, Copy, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { DraftState, Draft } from "../types";
 import { getTabTheme, getWordCount, getTimeAgo, copyToClipboard } from "../utils";
@@ -13,9 +24,10 @@ interface DraftEditorProps {
   draft: DraftState;
   index: number;
   onUpdate: (id: string, field: keyof Draft, value: string) => void;
+  onDelete: (id: string) => void;
 }
 
-export const DraftEditor = ({ draft, index, onUpdate }: DraftEditorProps) => {
+export const DraftEditor = ({ draft, index, onUpdate, onDelete }: DraftEditorProps) => {
   const theme = getTabTheme(index);
   const wordCount = getWordCount(draft.content);
   const { toast } = useToast();
@@ -62,6 +74,36 @@ export const DraftEditor = ({ draft, index, onUpdate }: DraftEditorProps) => {
                 <Copy className="mr-1 h-3 w-3" />
                 Copy
               </Button>
+              
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 px-3 text-xs border-2 border-dashed border-[#ff8888] text-[#ff0000] hover:bg-[#ffe5e5] hover:text-[#ff0000]"
+                  >
+                    <Trash2 className="mr-1 h-3 w-3" />
+                    Delete
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete Draft</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Are you sure you want to delete "{draft.title || "Untitled"}"? This action cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => onDelete(draft.id)}
+                      className="bg-slate-600 hover:bg-slate-700"
+                    >
+                      Delete
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
           </div>
         </CardHeader>
@@ -115,20 +157,6 @@ export const DraftEditor = ({ draft, index, onUpdate }: DraftEditorProps) => {
               placeholder="Start writing your draft content here..."
               className={`min-h-[400px] resize-none ${theme.border} focus:${theme.ring} transition-all duration-200`}
             />
-          </div>
-          
-          <div className={`p-4 rounded-lg ${theme.bg} ${theme.border} border-dashed`}>
-            <div className="flex items-center gap-3">
-              <div className={`p-2 rounded-full bg-gradient-to-r ${theme.gradient}`}>
-                <Zap className="h-4 w-4 text-white" />
-              </div>
-              <div>
-                <h4 className={`font-medium ${theme.text}`}>AI Enhancement Ready</h4>
-                <p className="text-sm text-muted-foreground">
-                  This draft is optimized for AI processing and can be used with various AI tools.
-                </p>
-              </div>
-            </div>
           </div>
         </CardContent>
       </Card>
