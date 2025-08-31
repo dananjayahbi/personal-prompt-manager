@@ -11,13 +11,15 @@ import {
   Plus,
   Star,
   Brain,
-  Zap
+  Zap,
+  Files
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: LayoutDashboard, color: "text-blue-600" },
   { name: "Prompts", href: "/prompts", icon: FileText, color: "text-green-600" },
+  { name: "Multi drafts", href: "/multi-drafts", icon: Files, color: "text-orange-600" },
   { name: "Preview", href: "/preview", icon: Eye, color: "text-purple-600" },
   { name: "Settings", href: "/settings", icon: Settings, color: "text-gray-600" },
 ]

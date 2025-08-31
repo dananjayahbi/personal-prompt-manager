@@ -49,3 +49,4 @@ prompt
 server.log
 
 prisma/db/
+prisma/migrations

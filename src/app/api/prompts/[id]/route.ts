@@ -3,11 +3,12 @@ import { db } from "@/lib/db"
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const prompt = await db.prompt.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
     
     if (!prompt) {
@@ -29,14 +30,15 @@ export async function GET(
 
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const body = await request.json()
     const { title, content, description, isFavorite } = body
     
     const existingPrompt = await db.prompt.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
     
     if (!existingPrompt) {
@@ -47,7 +49,7 @@ export async function PUT(
     }
     
     const prompt = await db.prompt.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title: title ?? existingPrompt.title,
         content: content ?? existingPrompt.content,
@@ -68,11 +70,12 @@ export async function PUT(
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params
     const existingPrompt = await db.prompt.findUnique({
-      where: { id: params.id }
+      where: { id }
     })
     
     if (!existingPrompt) {
@@ -83,7 +86,7 @@ export async function DELETE(
     }
     
     await db.prompt.delete({
-      where: { id: params.id }
+      where: { id }
     })
     
     return NextResponse.json({ message: "Prompt deleted successfully" })
