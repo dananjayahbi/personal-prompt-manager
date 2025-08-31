@@ -45,7 +45,7 @@ function MultiDraftsPageContent() {
             onValueChange={setActiveTab}
             className="w-full"
           >
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-[-10px]">
               <TabsList className="flex gap-1 h-auto p-1 bg-white/80 backdrop-blur-sm border border-gray-200 rounded-xl shadow-sm overflow-x-auto">
                 {drafts.map((draft, index) => (
                   <DraftTab key={draft.id} draft={draft} index={index} />

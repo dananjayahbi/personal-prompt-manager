@@ -13,4 +13,5 @@ export interface SettingsData {
   bracketMatching: boolean;
   highlightActiveLine: boolean;
   showInvisibles: boolean;
+  copyableCommand: string; // The command that appears in the copyable field
 }

@@ -23,7 +23,8 @@ const defaultSettings: SettingsData = {
   tabSize: 2,
   bracketMatching: true,
   highlightActiveLine: true,
-  showInvisibles: false
+  showInvisibles: false,
+  copyableCommand: 'npm run dev'
 }
 
 export default function SettingsPage() {
@@ -34,20 +35,34 @@ export default function SettingsPage() {
     loadSettings()
   }, [])
 
-  const loadSettings = () => {
+  const loadSettings = async () => {
     try {
+      const response = await fetch('/api/settings')
+      if (response.ok) {
+        const dbSettings = await response.json()
+        setSettings(dbSettings)
+        // Also save to localStorage for quick access
+        localStorage.setItem('app-settings', JSON.stringify(dbSettings))
+      } else {
+        // Fallback to localStorage
+        const savedSettings = localStorage.getItem('app-settings')
+        if (savedSettings) {
+          setSettings({ ...defaultSettings, ...JSON.parse(savedSettings) })
+        }
+      }
+    } catch (error) {
+      console.error('Error loading settings:', error)
+      // Fallback to localStorage
       const savedSettings = localStorage.getItem('app-settings')
       if (savedSettings) {
         setSettings({ ...defaultSettings, ...JSON.parse(savedSettings) })
       }
-    } catch (error) {
-      console.error('Error loading settings:', error)
     } finally {
       setLoading(false)
     }
   }
 
-  const updateSetting = <K extends keyof SettingsData>(
+  const updateSetting = async <K extends keyof SettingsData>(
     key: K,
     value: SettingsData[K]
   ) => {
@@ -55,9 +70,29 @@ export default function SettingsPage() {
     setSettings(newSettings)
     
     try {
-      localStorage.setItem('app-settings', JSON.stringify(newSettings))
+      // Save to database
+      const response = await fetch('/api/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newSettings)
+      })
+      
+      if (response.ok) {
+        // Also update localStorage for quick access
+        localStorage.setItem('app-settings', JSON.stringify(newSettings))
+        // Dispatch custom event to notify other components
+        window.dispatchEvent(new Event('settings-updated'))
+      } else {
+        console.error('Failed to save settings to database')
+        // Fallback to localStorage only
+        localStorage.setItem('app-settings', JSON.stringify(newSettings))
+        window.dispatchEvent(new Event('settings-updated'))
+      }
     } catch (error) {
       console.error('Error saving settings:', error)
+      // Fallback to localStorage only
+      localStorage.setItem('app-settings', JSON.stringify(newSettings))
+      window.dispatchEvent(new Event('settings-updated'))
     }
   }
 

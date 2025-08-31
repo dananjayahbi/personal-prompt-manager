@@ -16,8 +16,17 @@ export function DataManagement() {
   const handleExportData = async () => {
     setIsExporting(true)
     try {
-      // Get settings from localStorage
-      const settings = localStorage.getItem('app-settings')
+      // Get settings from API
+      const settingsResponse = await fetch('/api/settings')
+      let settingsData = null
+      
+      if (settingsResponse.ok) {
+        settingsData = await settingsResponse.json()
+      } else {
+        // Fallback to localStorage
+        const localSettings = localStorage.getItem('app-settings')
+        settingsData = localSettings ? JSON.parse(localSettings) : null
+      }
       
       // Get drafts from API
       const draftsResponse = await fetch('/api/drafts')
@@ -28,7 +37,7 @@ export function DataManagement() {
       }
       
       const data = {
-        settings: settings ? JSON.parse(settings) : null,
+        settings: settingsData,
         drafts: draftsData,
         exportDate: new Date().toISOString(),
         version: '1.0'
@@ -78,7 +87,21 @@ export function DataManagement() {
       
       // Import settings if available
       if (data.settings) {
-        localStorage.setItem('app-settings', JSON.stringify(data.settings))
+        // Save to database
+        try {
+          const response = await fetch('/api/settings', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data.settings)
+          })
+          if (response.ok) {
+            localStorage.setItem('app-settings', JSON.stringify(data.settings))
+          }
+        } catch (error) {
+          console.error('Error importing settings to database:', error)
+          // Fallback to localStorage only
+          localStorage.setItem('app-settings', JSON.stringify(data.settings))
+        }
       }
       
       // Import drafts if available
@@ -145,6 +168,40 @@ export function DataManagement() {
       // Clear localStorage settings
       localStorage.removeItem('app-settings')
       
+      // Clear database settings
+      try {
+        const settingsResponse = await fetch('/api/settings')
+        if (settingsResponse.ok) {
+          const settings = await settingsResponse.json()
+          if (settings.id) {
+            // Reset settings to defaults instead of deleting
+            await fetch('/api/settings', {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                theme: "light",
+                autoSave: true,
+                autoSaveInterval: 2000,
+                defaultCategory: "general",
+                exportFormat: "json",
+                showLineNumbers: true,
+                fontSize: 14,
+                fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
+                wordWrap: true,
+                lineHeight: 1.5,
+                tabSize: 2,
+                bracketMatching: true,
+                highlightActiveLine: true,
+                showInvisibles: false,
+                copyableCommand: "npm run dev"
+              })
+            })
+          }
+        }
+      } catch (error) {
+        console.error('Error resetting database settings:', error)
+      }
+      
       // Clear all drafts via API
       const draftsResponse = await fetch('/api/drafts')
       if (draftsResponse.ok) {
@@ -160,7 +217,7 @@ export function DataManagement() {
       
       toast({
         title: 'Data cleared',
-        description: 'All local data and drafts have been cleared successfully'
+        description: 'All data has been reset to defaults and drafts have been cleared'
       })
       
       // Reload page to reset state

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Slider } from '@/components/ui/slider'
 import { Switch } from '@/components/ui/switch'
@@ -132,6 +133,20 @@ export function AppearanceSettings({ settings, updateSetting }: AppearanceSettin
             checked={settings.showInvisibles}
             onCheckedChange={(checked) => updateSetting('showInvisibles', checked)}
           />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="copyableCommand">Copyable Command</Label>
+          <Input
+            id="copyableCommand"
+            value={settings.copyableCommand}
+            onChange={(e) => updateSetting('copyableCommand', e.target.value)}
+            placeholder="Enter command to display in header..."
+            className="font-mono text-sm"
+          />
+          <p className="text-xs text-muted-foreground">
+            This command will appear in the header with a copy button for easy access
+          </p>
         </div>
       </CardContent>
     </Card>

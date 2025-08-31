@@ -21,3 +21,24 @@ model Draft {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model Settings {
+  id                  String  @id @default(cuid())
+  theme               String  @default("light")
+  autoSave            Boolean @default(true)
+  autoSaveInterval    Int     @default(2000)
+  defaultCategory     String  @default("general")
+  exportFormat        String  @default("json")
+  showLineNumbers     Boolean @default(true)
+  fontSize            Int     @default(14)
+  fontFamily          String  @default("Monaco, Menlo, \"Ubuntu Mono\", monospace")
+  wordWrap            Boolean @default(true)
+  lineHeight          Float   @default(1.5)
+  tabSize             Int     @default(2)
+  bracketMatching     Boolean @default(true)
+  highlightActiveLine Boolean @default(true)
+  showInvisibles      Boolean @default(false)
+  copyableCommand     String  @default("npm run dev")
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
