@@ -4,8 +4,8 @@ const nextConfig = {
   images: {
     domains: ['localhost'],
   },
-  output: 'standalone',
-  // Set custom port configuration
+  // Removed 'standalone' output to work with 'next start'
+  // Use 'output: standalone' only for containerized deployments
   async rewrites() {
     return []
   }

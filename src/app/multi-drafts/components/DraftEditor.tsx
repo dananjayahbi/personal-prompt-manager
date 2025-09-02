@@ -51,7 +51,7 @@ export const DraftEditor = ({ draft, index, onUpdate, onDelete }: DraftEditorPro
   return (
     <TabsContent key={draft.id} value={draft.id} className="mt-6">
       <Card className={`${theme.border} ${theme.bg} backdrop-blur-sm`}>
-        <CardHeader className="pb-4">
+        <CardHeader className="pb-0">
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-3">
               <div className={`w-3 h-3 rounded-full bg-gradient-to-r ${theme.gradient}`}></div>
@@ -108,9 +108,9 @@ export const DraftEditor = ({ draft, index, onUpdate, onDelete }: DraftEditorPro
           </div>
         </CardHeader>
         
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-4 mt-[-20px]">
           <div className="grid gap-4 md:grid-cols-2">
-            <div className="space-y-2">
+            <div className="space-y-0">
               <label className={`text-sm font-medium ${theme.text}`}>
                 Title
               </label>
